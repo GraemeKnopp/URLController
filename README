@@ -1,0 +1,127 @@
+#
+# Thanks for looking at my project.
+#
+
+# add all the files in the project (except this one) to your xcode project
+# in your controlling object (viewcontroller, etc…) add in:
+
+
+#import "URLController.h"
+
+@interface myController : UIViewController 
+
+  <UITableViewDelegate, UITableViewDataSource, URLControllerDelegate>
+
+{
+  UITableView *myList;
+  NSMutableArray *myArray;
+  URLController* urlController;
+
+  id appDelegate;
+}
+
+@property (nonatomic, retain) IBOutlet UITableView *myList;
+@property (nonatomic, retain) NSMutableArray *myArray;
+@property (nonatomic, retain) URLController* urlController;
+
+@end
+
+
+# in your implementation (.m) add the following:
+
+
+#import "myController.h"
+
+@implementation myController
+
+@synthesize myList;
+@synthesize myArray;
+@synthesize urlController;
+
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+  
+  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self) {
+    // Custom initialization
+  }
+  return self;
+}
+
+- (void)dealloc {
+
+  [urlController release];
+  [myList release];
+  [myArray release];
+  
+  [super dealloc];
+}
+
+- (void)viewDidLoad {
+
+  [super viewDidLoad];
+ 
+  urlController = [URLController alloc] init];
+  [urlController setMyDelegate:self];
+
+
+  [self.urlController addToDownload:@"http://www.apple.com" ofType:DL_WEBPAGE];
+  [self.urlController addToDownload:@"http://www.google.com" ofType:DL_WEBPAGE];
+  [self.urlController addToDownload:@"http://www.facebook.com" ofType:DL_WEBPAGE];
+
+  [self.urlController startDownloading];
+}
+
+
+
+#pragma mark - URLController Protocol Methods
+
+
+- (void) downloadFinished:(NSData*)newData forContent:(int)contentType {
+
+  // do something with data
+  
+  switch (contentType) {
+
+    case DL_WEBPAGE:
+      …
+      //write your handler code here
+      …
+      break;
+
+    default:
+      break;
+  }
+
+}
+
+- (void) downloadFailed:(NSString*)error_message {
+      …
+      //write your handler code here
+      …
+}
+
+- (void) uploadFinished:(NSData*)newData {
+      …
+      //write your handler code here
+      …
+}
+
+- (void) uploadFailed:(NSString*)error_message {
+      …
+      //write your handler code here
+      …
+}
+
+- (void) uploadQueueFinished {
+      …
+      //write your handler code here
+      …
+}
+
+- (void) downloadQueueFinished {
+      …
+      //write your handler code here
+      …
+}
+
