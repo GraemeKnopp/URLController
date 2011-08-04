@@ -31,6 +31,13 @@ typedef enum
   
 } CONTROLLER_STATE;
 
+typedef enum
+{
+  DL_WEBPAGE,
+  DL_MYCUSTOMTYPE,
+  DL_MYOTHERTYPE
+} DLC_TYPE
+
 
 @protocol URLControllerDelegate <NSObject>
 - (void) downloadFinished:(NSData*)newData forContent:(int)contentType;
@@ -74,10 +81,16 @@ typedef enum
 -(void) downloadFrom:(NSString*)url;
 -(void) setCredentialsForDownload:(NSString*)newUser withPass:(NSString*)newPass;
 
+-(int) downloadQueueCount;
+-(int) uploadQueueCount;
+
+
+
+// custom implementation methods for your custom DLC_TYPES
+
 -(void) downloadListFrom:(NSString*)url;
 -(void) downloadDataFrom:(NSString*)url;
 
--(int) downloadQueueCount;
--(int) uploadQueueCount;
+
 
 @end

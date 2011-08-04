@@ -148,14 +148,16 @@
     currentType = (int)[[dict valueForKey:@"contentType"] intValue];
     NSString* url = [dict valueForKey:@"url"];
 
+    // handle each of your custom DLC_TYPES here
+
     switch (currentType) {
       case DL_WEBPAGE:
         [self downloadFrom:url];
         break;
-      case DL_SURVEYALL:
+      case DL_MYCUSTOMTYPE:
         [self downloadListFrom:url];
         break;
-      case DL_SURVEYSINGLE:
+      case DL_MYOTHERTYPE:
         [self downloadDataFrom:url];
         break;
       default:
@@ -190,7 +192,6 @@
   [self setCredentials:uploader withUser:newUser withPass:newPass];
 }
 
-
 -(void) addToDownload:(NSString*)url ofType:(int)contentType {
   NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
   [dict setValue:url forKey:@"url"];
@@ -205,22 +206,9 @@
   [downloader getRequest:url];
 }
 
--(void) downloadListFrom:(NSString*)url {
-  currentType = DL_SURVEYALL;
-  [downloader setMyDelegate:self];
-  [downloader getRequest:url];
-}
-
--(void) downloadDataFrom:(NSString *)url {
-  currentType = DL_SURVEYSINGLE;
-  [downloader setMyDelegate:self];
-  [downloader getRequest:url];
-}
-
 -(void) setCredentialsForDownload:(NSString*)newUser withPass:(NSString*)newPass {
   [self setCredentials:downloader withUser:newUser withPass:newPass];
 }
-
 
 -(int) downloadQueueCount {
   return (downloadQueue == nil) ? 0 : [uploadQueue count];
@@ -229,5 +217,24 @@
 -(int) uploadQueueCount {
   return (uploadQueue == nil) ? 0 : [uploadQueue count];
 }
+
+
+
+#pragma mark - Custom DLC Implementation Methods
+
+
+-(void) downloadListFrom:(NSString*)url {
+  currentType = DL_MYCUSTOMTYPE;
+  [downloader setMyDelegate:self];
+  [downloader getRequest:url];
+}
+
+-(void) downloadDataFrom:(NSString *)url {
+  currentType = DL_MYOTHERTYPE;
+  [downloader setMyDelegate:self];
+  [downloader getRequest:url];
+}
+
+
 
 @end
